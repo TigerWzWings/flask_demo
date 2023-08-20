@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>{{ movies|length }} Titles</p>
+<p>Already seen {{ movies|length }} films. </p>
+
 <!-- 在模板中可以直接使用 current_user 变量 -->
 {% if current_user.is_authenticated %}
 <form method="post">
-    Name <input type="text" name="title" autocomplete="off" required>
-    Year <input type="text" name="year" autocomplete="off" required>
-    <input class="btn" type="submit" name="submit" value="Add">
+    <ul>
+        <li>Name <input type="text" name="title" autocomplete="off" required></li>
+        <li>Released Time <input type="text" name="released_time" autocomplete="off" required></li>
+        <li>Director <input type="text" name="director" autocomplete="off" ></li>
+        <li><input class="btn" type="submit" name="submit" value="Add new Film"></li>
+    </ul>
 </form>
 {% endif %}
 
@@ -14,7 +18,11 @@
 <ul class="movie-list">
     {% for movie in movies %}
     <li>
-        {{ movie.title }} - {{ movie.year }}
+        {% if movie.director %}
+        {{ movie.title }} - {{ movie.released_time }} by {{movie.director}}
+        {% else %}
+        {{ movie.title }} - {{ movie.released_time }}
+        {% endif %}
         <span class="float-right">
             <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb">IMDb</a>
             {% if current_user.is_authenticated %}
